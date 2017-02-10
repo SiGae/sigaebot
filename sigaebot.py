@@ -27,7 +27,7 @@ bot = telebot.TeleBot(bot_private.id['botid'])
 
 @bot.message_handler(commands=['pink'])
 def check_activate(message):
-    bot.reply_to(message, "bot actvation is stable")
+    bot.reply_to(message, "bot activation is stable")
 
 
 def todaytime() -> str:
@@ -36,10 +36,14 @@ def todaytime() -> str:
     return text
 
 
-@bot.message_handler(func=lambda alwaysTrue:True)
-def always(message):
+@bot.message_handler(func=lambda alwaysTrue: True)
+def alwaysTure(message):
     try:
         print(message, end='\n\n')
+        for key, value in bot_private.command.items():
+            if key in message.text:
+                bot.reply_to(message, value)
+
     except Exception as e:
         print(e)
 
