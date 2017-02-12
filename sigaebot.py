@@ -44,13 +44,12 @@ def alwaysTure(message):
         for key, value in bot_private.command.items():
             if key in message.text:
                 bot.reply_to(message, value())
-                break
                 return
-        if "ㅋㅋㅋㅋㅋㅋㅋㅋ" in message.text:
-            if not thread_active:
-                t = threading.Thread(target=tr)
-                bot.send_message(message.chat.id, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ')
-                t.start()
+            if "ㅋㅋㅋㅋㅋㅋㅋㅋ" in message.text:
+                if not thread_active:
+                    t = threading.Thread(target=tr)
+                    bot.send_message(message.chat.id, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ')
+                    t.start()
 
     except Exception as e:
         print(e)
