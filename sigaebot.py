@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import telebot
 import time
 import threading
@@ -42,7 +43,7 @@ def alwaysTure(message):
                         print("call")
         for key, value in bot_private.command.items():
             if key in message.text:
-                bot.send_message(str(message.chat.id), value())
+                bot.reply_to(message, value())
                 break
                 return
         if "ㅋㅋㅋㅋㅋㅋㅋㅋ" in message.text:
