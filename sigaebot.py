@@ -5,6 +5,7 @@ import threading
 import re
 import sigaebot_private as bot_private
 
+Anti_monday = True
 thread_active = False
 
 
@@ -16,12 +17,22 @@ def remove_none(text):
 
 
 bot = telebot.TeleBot(bot_private.id['botid'])
-memberlist = ["creator", "administrator", "member"]
+
 
 @bot.message_handler(commands=['ping'])
 def check_activate(message):
-    bot.reply_to(message, "bot activation is stable ㄴ")
-    bot.reply_to(message, bot.get_chat_member(message.chat.id, message.from_user.id))
+    bot.reply_to(message, "bot activation is stable ")
+
+@bot.message_handler(commands = bot_private.command1)
+def i_dont_like_monday(message):
+    global Anti_monday
+    temp = message.text.replace("/kick", "").strip()
+    if temp in bot_private.triggerOn:
+        Anti_monday = True
+        bot.send_message(message.chat.id, '켜짐 ㅎㅎ')
+    elif temp in bot_private.triggerOff:
+        Anti_monday = False
+        bot.send_message(message.chat.id, '꺼짐ㅎㅎ')
 
 
 def tr():
@@ -31,8 +42,8 @@ def tr():
     thread_active = False
 
 
-@bot.message_handler(func=lambda alwaysTrue: True)
-def alwaysTure(message):
+@bot.message_handler(func=lambda Alwaystrue: True)
+def alwaysTrue(message):
     try:
         print(message, end='\n\n')
         for key0, value0 in bot_private.id.items():
@@ -42,15 +53,9 @@ def alwaysTure(message):
                         and "r" in bot.get_chat_member(message.chat.id, value0).status\
                         and message.from_user.id != value0:
                     bot.send_message(value0, "님 {}가 너 불러 \n 메세지 내용 : {}".format(
-                                    str(message.from_user.first_name) + remove_none(message.from_user.last_name), message.text))
+                                    str(message.from_user.first_name)
+                                    + remove_none(message.from_user.last_name), message.text))
                     print("call")
-                    return
-
-#test
-#        if "월요일" in message.text:
- #           bot.send_message(message.chat.id, "뭐? 월요일? 뒤지고 싶냐")
-#            bot.kick_chat_member(message.chat.id,message.from_user.id )
-
 
         for key, value in bot_private.command.items():
             if key in message.text:
@@ -61,8 +66,18 @@ def alwaysTure(message):
                     t = threading.Thread(target=tr)
                     bot.send_message(message.chat.id, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ')
                     t.start()
+        if Anti_monday:
+            for key, value in bot_private.ban.items():
+                if key in message.text:
+                    bot.send_message(message.chat.id, value)
+                    if "a" in bot.get_chat_member(message.chat.id, message.from_user.id).status:
+                        bot.send_message(message.chat.id, "관리자는 킥할수 없습니다")
+                else:
+                    bot.kick_chat_member(message.chat.id, message.from_user.id)
+
 
     except Exception as e:
         print(e)
+
 
 bot.polling()
