@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
-import telebot
-import time
-import threading
-import re
+import importlist as code
 import sigaebot_private as bot_private
 
-Anti_monday = True
+answer = ['ㅇㅇ', 'ㄴㄴ']
+
+Anti_monday = False
 thread_active = False
 
 
@@ -16,12 +15,13 @@ def remove_none(text):
         return text
 
 
-bot = telebot.TeleBot(bot_private.id['botid'])
+bot = code.telebot.TeleBot(bot_private.id['botid'])
 
 
 @bot.message_handler(commands=['ping'])
 def check_activate(message):
     bot.reply_to(message, "bot activation is stable ")
+
 
 @bot.message_handler(commands = bot_private.command1)
 def i_dont_like_monday(message):
@@ -34,21 +34,28 @@ def i_dont_like_monday(message):
         Anti_monday = False
         bot.send_message(message.chat.id, '꺼짐ㅎㅎ')
 
+@bot.message_handler(commands = list(bot_private.quickcommand.keys()))
+def quickcommand(message):
+    bot.reply_to(message, bot_private.quickcommand[message.text[1:5]]())
 
-def tr():
-    global thread_active
-    thread_active = True
-    time.sleep(30)
-    thread_active = False
+
+@bot.message_handler(commands=['namu'])
+def namuwiki(message):
+    url = 'https://namu.wiki/w/{0}'.format(message.text.replace("/namu ", "").replace(" ","%20").strip())
+    bot.send_message(message.chat.id, url)
+    #driver = code.webdriver.Firefox(executable_path="/home/pi/geckodriver")
+    #driver.get(url)
+    #bot.send_photo(message.chat.id, driver.get_screenshot_as_png())
+    #driver.close()
 
 
 @bot.message_handler(func=lambda Alwaystrue: True)
-def alwaysTrue(message):
+def always(message):
+    print(message, end='\n\n')
     try:
-        print(message, end='\n\n')
         for key0, value0 in bot_private.id.items():
             for key2, value2 in bot_private.regex.items():
-                target_reg = re.compile(key2)
+                target_reg = code.re.compile(key2)
                 if (target_reg.search(message.text) and value2 == key0)\
                         and "r" in bot.get_chat_member(message.chat.id, value0).status\
                         and message.from_user.id != value0:
@@ -61,23 +68,24 @@ def alwaysTrue(message):
             if key in message.text:
                 bot.reply_to(message, value())
                 return
-            if "ㅋㅋㅋㅋㅋㅋㅋㅋ" in message.text:
-                if not thread_active:
-                    t = threading.Thread(target=tr)
-                    bot.send_message(message.chat.id, 'ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ')
-                    t.start()
+
         if Anti_monday:
             for key, value in bot_private.ban.items():
                 if key in message.text:
                     bot.send_message(message.chat.id, value)
                     if "a" in bot.get_chat_member(message.chat.id, message.from_user.id).status:
                         bot.send_message(message.chat.id, "관리자는 킥할수 없습니다")
-                else:
-                    bot.kick_chat_member(message.chat.id, message.from_user.id)
-
+                    else:
+                        bot.kick_chat_member(message.chat.id, message.from_user.id)
 
     except Exception as e:
         print(e)
 
+
+def tr():
+    global thread_active
+    thread_active = True
+    code.time.sleep(30)
+    thread_active = False
 
 bot.polling()
