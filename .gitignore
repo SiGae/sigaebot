@@ -1,8 +1,10 @@
-sigaebot_private.py
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/misc.xml
 .idea/modules.xml
 .idea/sigaebot.iml
 .idea/vcs.xml
 .idea/workspace.xml
+__pycache__/importlist.cpython-36.pyc
 __pycache__/sigaebot_private.cpython-36.pyc
+dbconnect.py
+sigaebot_private.py
