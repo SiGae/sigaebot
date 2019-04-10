@@ -13,6 +13,9 @@ bun = -1
 hcnt = 0
 
 
+
+
+
 def remove_none(text):
     if text is None:
         return ""
@@ -45,13 +48,16 @@ def search_keyword(message):
     count = 0
     slicing_text =  message.text.replace("/search", "").split()
     bot.reply_to(message, '서칭시작')
-    for i in range(0, message.message_id):
+    tem = bot.send_message(message.chat.id, "0퍼센트 진행중 ( 0 / 1000 )")
+    for i in range(message.message_id - 1000, message.message_id):
         try:
             forwardMessage = bot.forward_message(773884200, message.chat.id, i)
             if slicing_text[0] in forwardMessage.text and forwardMessage.forward_from.username.lower() == slicing_text[1].lower():
                 count += 1
-        except Exception:
+            bot.edit_message_text("{0}퍼센트 진행중 ( {1} / 1000 )\n현재 검출 수 : {2}".format((i - (message.message_id-1000)) / 10 , i - (message.message_id-1000), count), message.chat.id, tem.message_id)
+        except Exception as e:
             i += 1
+            print(e)
     bot.reply_to(message, count)
 
 @bot.message_handler(commands = ['test'])
@@ -85,15 +91,16 @@ def always(message):
 
                 killerName = message.from_user.username
                 diedName = value
-                json_str[0][killerName.lower()] += 1
-                json_str[1][value.lower()] += 1
-                print(json_str[0][killerName.lower()])
-                print(json_str[1][value.lower()])
-                print('temp')
-                bot.send_message(message.chat.id,"{0}님께서 {1}님을 죽이셨습니다.\n{0}님의 킬카운트 : {2}\n{1}님의 데스카운트 : {3}".format(killerName, diedName, json_str[0][killerName.lower()],   json_str[1][value.lower()]))
-                json_dmp = json.dumps(json_str)
-                with open("table.json", 'w') as fa:
-                     fa.write(json_dmp)
+                if message.from_user.username.upper() != value.upper():
+                    json_str[0][killerName.lower()] += 1
+                    json_str[1][value.lower()] += 1
+                    print(json_str[0][killerName.lower()])
+                    print(json_str[1][value.lower()])
+                    print('temp')
+                    bot.send_message(message.chat.id,"{0}님께서 {1}님을 죽이셨습니다.\n{0}님의 킬카운트 : {2}\n{1}님의 데스카운트 : {3}".format(killerName, diedName, json_str[0][killerName.lower()],   json_str[1][value.lower()]))
+                    json_dmp = json.dumps(json_str)
+                    with open("table.json", 'w') as fa:
+                        fa.write(json_dmp)
         if Anti_monday:
             for key, value in bot_private.ban.items():
                 if key in message.text:

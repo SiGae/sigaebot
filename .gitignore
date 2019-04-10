@@ -8,3 +8,4 @@ __pycache__/importlist.cpython-36.pyc
 __pycache__/sigaebot_private.cpython-36.pyc
 dbconnect.py
 sigaebot_private.py
+.DS_Store
