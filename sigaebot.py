@@ -60,11 +60,6 @@ def search_keyword(message):
             print(e)
     bot.reply_to(message, count)
 
-@bot.message_handler(commands = ['test'])
-def testf(message):
-    bot.reply_to(message, bot.forward_message(message.from_user.id, message.chat.id, 517968).forward_from.username)
-
-
 @bot.message_handler(commands = list(bot_private.quickcommand.keys()))
 def quickcommand(message):
     bot.reply_to(message, bot_private.quickcommand[message.text[1:5]]())
