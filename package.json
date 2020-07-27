@@ -1,0 +1,22 @@
+{
+  "name": "sigaebot",
+  "version": "1.0.0",
+  "description": "telegram bot",
+  "main": "bot.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SiGae/sigaebot.git"
+  },
+  "author": "SiGae",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SiGae/sigaebot/issues"
+  },
+  "homepage": "https://github.com/SiGae/sigaebot#readme",
+  "dependencies": {
+    "telegraf": "^3.38.0"
+  }
+}
