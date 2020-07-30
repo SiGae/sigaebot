@@ -22,6 +22,7 @@ const run = () => {
       ctx.message?.text?.toString().search(",") != -1
         ? (ctx.message?.text?.toString() + "").split(",")
         : ctx.message?.text?.toString().split(" ");
+    delete pickList[0];
     ctx.reply(pickList[Math.floor(Math.random() * pickList.length)].trim());
   });
   bot.command("dday", async (ctx) => {
